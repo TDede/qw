@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schlagfertigkeits-Dojo</title>
+  <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-orange-100 text-gray-800 font-sans">
+  <!-- Container -->
+  <div class="max-w-lg mx-auto p-6">
+    <!-- Header -->
+    <header class="text-center">
+      <h1 class="text-3xl font-bold text-orange-600 mb-4">Schlagfertigkeits-Dojo</h1>
+      <p class="text-lg">Bereit für deine nächste Herausforderung?</p>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="mt-6">
+      <div id="loading" class="text-center">
+        <p>Lade das nächste Szenario...</p>
+      </div>
+      <div id="scenario-container" class="hidden">
+        <div id="scenario-text" class="bg-white shadow rounded p-4 text-center mb-4">
+          <!-- Szenario wird hier geladen -->
+        </div>
+        <textarea id="user-response" class="w-full p-2 border rounded mb-4" placeholder="Deine Antwort..."></textarea>
+        <button id="submit-btn" class="w-full bg-orange-500 text-white py-2 rounded shadow">
+          Antwort absenden
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Firebase Config & Script -->
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyBedDi-f5sPfgI_ryijTlWCCWnztEKifNU",
+        authDomain: "quick-wit-bac8d.firebaseapp.com",
+        projectId: "quick-wit-bac8d",
+        storageBucket: "quick-wit-bac8d.firebasestorage.app",
+        messagingSenderId: "441972208054",
+        appId: "1:441972208054:web:9d031da65efa184e93d117",
+        measurementId: "G-C8YBN8DPLL"
+    };
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore(app);
+
+    // Load Scenario
+    async function loadScenario() {
+      const scenarioRef = db.collection("scenarios").doc("scenario0001");
+      const doc = await scenarioRef.get();
+      if (doc.exists) {
+        const data = doc.data();
+        document.getElementById("scenario-text").textContent = data.translations["de"].scenario;
+        document.getElementById("loading").classList.add("hidden");
+        document.getElementById("scenario-container").classList.remove("hidden");
+      } else {
+        alert("Szenario nicht gefunden!");
+      }
+    }
+
+    // Submit Response
+    document.getElementById("submit-btn").addEventListener("click", async () => {
+      const response = document.getElementById("user-response").value;
+      if (response.trim() === "") {
+        alert("Bitte eine Antwort eingeben!");
+        return;
+      }
+      // Speichere die Antwort (erweiterbar)
+      console.log("User Response:", response);
+      alert("Antwort gesendet! Vielen Dank!");
+    });
+
+    // On Load
+    loadScenario();
+  </script>
+</body>
+</html>
