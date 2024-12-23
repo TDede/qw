@@ -38,7 +38,6 @@
   <script>
     // Firebase Config
     const firebaseConfig = {
-        apiKey: "AIzaSyBedDi-f5sPfgI_ryijTlWCCWnztEKifNU",
         authDomain: "quick-wit-bac8d.firebaseapp.com",
         projectId: "quick-wit-bac8d",
         storageBucket: "quick-wit-bac8d.firebasestorage.app",
@@ -46,6 +45,13 @@
         appId: "1:441972208054:web:9d031da65efa184e93d117",
         measurementId: "G-C8YBN8DPLL"
     };
+
+    const functions = require("firebase-functions");
+
+    // Firebase apiKey.
+    const apiKey = functions.config().api.key;
+    console.log(apiKey);
+
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore(app);
 
